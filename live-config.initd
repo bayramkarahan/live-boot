@@ -1,0 +1,22 @@
+#!/sbin/openrc-run
+
+# Copyright (c) Ali Riza KESKIN
+# This code is licensed under GPLv3
+
+name="live-config"
+description="Live configuration service"
+
+depend() {
+	need localmount devfs
+	before getty hostname
+}
+
+start() {
+    if ! grep "boot=live" /proc/cmdline >/dev/null; then
+        eend 0
+        exit 0
+    fi
+    ebegin "Live config"
+    /bin/sh /usr/libexec/live-config
+}
+
